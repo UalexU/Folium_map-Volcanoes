@@ -1,10 +1,13 @@
 
+from email.encoders import encode_noop
+from turtle import fillcolor
 import folium ## Library to use the interactive map
 import webbrowser ## lIBRARY to open the brawser directly from the code
 import pandas
 
 ## Read the data frame that contains all the coordinates of the volcanoes
 data = pandas.read_csv("Volcanoes.txt") 
+
 
 ## Function for color depending of the heigh of the mountain
 def color_heigh(elevation):
@@ -25,12 +28,16 @@ map = folium.Map(location =[39.3079189,-110.0597404], zoom_start= 5)
 ## Fg is a group called My map
 fg = folium.FeatureGroup(name = 'My map')
 
+map.add_child(fg) ## I make the fg group a 'child' of my object map 
+
+tooltip = "Volcano" # This is the text that appears when my cursor is over the marker
+
 ## Make a for loop using zip in order to use multiples variables to add multiple markers in the map
 # Alternative for loop for coordinates in [[-25.3511836, -57.6478208],[-24.3511836, -58.6478208]]:  Just add here a comma and the position of the new marker 
 for lt, ln, el in zip(lat, lon, elev):
-    fg.add_child(folium.Marker(location =[lt, ln], popup = el, icon = folium.Icon(color_heigh(el)), tiles = ""))
-    
-map.add_child(fg) ## I make the fg group a 'child' of my object map 
+    fg.add_child(folium.CircleMarker(location =[lt, ln], radius = 6, popup = str(el) + " m", fill_color = color_heigh(el), color = 'grey', fill_opacity = 0.7, tooltip= tooltip))
+
+fg.add_child(folium.GeoJson(data = (open('world.json', 'r', encoding= 'utf-8-sig').read())))
 
 ## Save the changes in the html file called Map1
 map.save("Map1.html")
