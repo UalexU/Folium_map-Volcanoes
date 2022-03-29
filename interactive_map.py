@@ -37,7 +37,7 @@ tooltip = "Volcano" # This is the text that appears when my cursor is over the m
 for lt, ln, el in zip(lat, lon, elev):
     fg.add_child(folium.CircleMarker(location =[lt, ln], radius = 6, popup = str(el) + " m", fill_color = color_heigh(el), color = 'grey', fill_opacity = 0.7, tooltip= tooltip))
 
-fg.add_child(folium.GeoJson(data = (open('world.json', 'r', encoding= 'utf-8-sig').read())))
+fg.add_child(folium.GeoJson(data = open('world.json', 'r', encoding= 'utf-8-sig').read()))
 
 ## Save the changes in the html file called Map1
 map.save("Map1.html")
